@@ -1,0 +1,15 @@
+services:
+  node-env:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: meu-node-env
+    volumes:
+      - ..:/app/pedegas
+      - /app/pedegas/node_modules
+    ports:
+      - "5173:5173"
+    env_file:
+      - ../.env
+    working_dir: /app/pedegas
+    command: sh -c "npm install && npx vite --host --strictPort"

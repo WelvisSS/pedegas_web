@@ -1,0 +1,22 @@
+# Dependências locais
+node_modules
+
+# Arquivos de build
+dist
+
+# Logs
+npm-debug.log
+
+# Arquivos de ambiente
+.env
+
+# Pasta docker (não copiar para dentro do container)
+docker/
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
