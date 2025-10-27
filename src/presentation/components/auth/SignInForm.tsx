@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { validateEmail, validatePassword } from '../../../utils/validators';
 import { useAuth } from '../../hooks';
 import Alert from '../ui/Alert';
@@ -34,13 +34,13 @@ const SignInForm = ({ onToggleForm, onForgotPassword }: SignInFormProps) => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [alert, setAlert] = useState<AlertState | null>(null);
 
-  const handleInputChange = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (field: keyof typeof formData) => (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev: typeof formData) => ({ ...prev, [field]: value }));
 
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: null }));
+      setErrors((prev: FormErrors) => ({ ...prev, [field]: null }));
     }
   };
 
@@ -57,7 +57,7 @@ const SignInForm = ({ onToggleForm, onForgotPassword }: SignInFormProps) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setAlert(null);
 

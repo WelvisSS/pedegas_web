@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FormEvent } from 'react';
 import { GasStation } from '../../../domain/entities/GasStation';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
@@ -121,14 +121,14 @@ const GasStationForm = ({ gasStation, onSubmit, onCancel, loading }: GasStationF
     }, [gasStation]);
 
     const handleInputChange = (field: keyof FormData, value: string | string[] | Coordinates) => {
-        setFormData(prev => ({
+        setFormData((prev: FormData) => ({
             ...prev,
             [field]: value
         }));
 
         // Clear error when user starts typing
         if (errors[field]) {
-            setErrors(prev => ({
+            setErrors((prev: FormErrors) => ({
                 ...prev,
                 [field]: ''
             }));
@@ -136,14 +136,14 @@ const GasStationForm = ({ gasStation, onSubmit, onCancel, loading }: GasStationF
     };
 
     const handleArrayChange = (field: 'services' | 'paymentMethods', value: string[]) => {
-        setFormData(prev => ({
+        setFormData((prev: FormData) => ({
             ...prev,
             [field]: value
         }));
     };
 
     const handleOperatingHoursChange = (day: keyof OperatingHours, field: 'open' | 'close', value: string) => {
-        setFormData(prev => ({
+        setFormData((prev: FormData) => ({
             ...prev,
             operatingHours: {
                 ...prev.operatingHours,
@@ -195,7 +195,7 @@ const GasStationForm = ({ gasStation, onSubmit, onCancel, loading }: GasStationF
         return cleanPhone.length >= 10 && cleanPhone.length <= 11;
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
 
         if (!validateForm()) {

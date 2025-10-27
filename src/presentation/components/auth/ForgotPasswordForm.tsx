@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { validateEmail } from '../../../utils/validators';
 import { useAuth } from '../../hooks';
 import Alert from '../ui/Alert';
@@ -25,7 +25,7 @@ const ForgotPasswordForm = ({ onToggleForm }: ForgotPasswordFormProps) => {
   const [error, setError] = useState('');
   const [alert, setAlert] = useState<AlertState | null>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
 
@@ -44,7 +44,7 @@ const ForgotPasswordForm = ({ onToggleForm }: ForgotPasswordFormProps) => {
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setAlert(null);
 

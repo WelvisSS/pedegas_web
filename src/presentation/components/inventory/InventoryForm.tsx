@@ -69,12 +69,12 @@ const InventoryForm = ({ item, onSubmit, onCancel, loading }: InventoryFormProps
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
+        setFormData((prev: FormState) => ({
             ...prev,
             [name]: value
         }));
         if (errors[name]) {
-            setErrors(prev => ({
+            setErrors((prev: FormErrors) => ({
                 ...prev,
                 [name]: ''
             }));

@@ -4,6 +4,7 @@ import type { InventoryData } from '../../../application/services/InventoryServi
 import { supabase } from '../../../lib/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
 import { GasStation } from '../../../domain/entities/GasStation';
+import { Inventory } from '../../../domain/entities/Inventory';
 import useInventory from '../../../presentation/hooks/useInventory';
 import Alert from '../ui/Alert';
 import Button from '../ui/Button';
@@ -123,8 +124,8 @@ const InventoryScreen = ({ onNavigate, activeScreen = 'inventory' }: InventorySc
 
     // Transform Inventory entities to InventoryItem format for UI
     const inventoryItems: InventoryItem[] = inventory
-        .filter(item => item.id !== undefined)
-        .map(item => ({
+        .filter((item: Inventory) => item.id !== undefined)
+        .map((item: Inventory) => ({
             id: item.id!,
             productName: item.productName,
             productType: item.productType,

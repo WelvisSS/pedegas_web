@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { USER_TYPES } from '../../../constants/userTypes';
 import type { UserType } from '../../../constants/userTypes';
 import {
@@ -63,7 +63,7 @@ const SignUpForm = ({ onToggleForm }: SignUpFormProps) => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [alert, setAlert] = useState<AlertState | null>(null);
 
-  const handleInputChange = (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (field: keyof FormData) => (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
 
     // Format specific fields
@@ -73,19 +73,19 @@ const SignUpForm = ({ onToggleForm }: SignUpFormProps) => {
       value = formatPhone(value);
     }
 
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev: FormData) => ({ ...prev, [field]: value }));
 
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: null }));
+      setErrors((prev: FormErrors) => ({ ...prev, [field]: null }));
     }
   };
 
   const handleUserTypeChange = (userType: UserType) => {
-    setFormData((prev) => ({ ...prev, userType }));
+    setFormData((prev: FormData) => ({ ...prev, userType }));
     // Clear company-specific errors when switching to individual
     if (userType === USER_TYPES.INDIVIDUAL) {
-      setErrors((prev) => {
+      setErrors((prev: FormErrors) => {
         const { companyName: _companyName, cnpj: _cnpj, ...rest } = prev;
         return rest;
       });
@@ -130,7 +130,7 @@ const SignUpForm = ({ onToggleForm }: SignUpFormProps) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setAlert(null);
 

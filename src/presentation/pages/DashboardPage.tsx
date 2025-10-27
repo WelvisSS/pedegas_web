@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { SubscriptionService } from '../../application/services/SubscriptionService';
+import { SubscriptionPlan } from '../../domain/entities/SubscriptionPlan';
 import { supabase } from '../../lib/supabaseClient';
 import DeliveryScreen from '../components/deliveries/DeliveryScreen';
 import DeliverymanScreen from '../components/deliverymen/DeliverymanScreen';
@@ -247,7 +248,7 @@ const DashboardPage = () => {
                 'plano ultra': 'ultra'
             };
 
-            const selectedPlan = plans.find((p) => {
+            const selectedPlan = plans.find((p: SubscriptionPlan) => {
                 const planName = p.name.toLowerCase();
                 const selectedPlanName = plan.name.toLowerCase();
 

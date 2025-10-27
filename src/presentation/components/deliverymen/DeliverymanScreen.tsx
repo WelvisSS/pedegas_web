@@ -24,6 +24,14 @@ interface FormErrors {
     gasStationId?: string;
 }
 
+interface FormData {
+    name: string;
+    phone: string;
+    email: string;
+    cpf: string;
+    gasStationId: string;
+}
+
 const DeliverymanScreen = ({ onNavigate, activeScreen = 'deliverymen' }: DeliverymanScreenProps) => {
     const { user, signOut } = useAuth();
     const [selectedGasStationId, setSelectedGasStationId] = useState<string | null>(null);
@@ -97,23 +105,23 @@ const DeliverymanScreen = ({ onNavigate, activeScreen = 'deliverymen' }: Deliver
         try {
             setFormErrors({});
             if (!formData.name.trim()) {
-                setFormErrors((prev) => ({ ...prev, name: 'Nome é obrigatório' }));
+                setFormErrors((prev: FormErrors) => ({ ...prev, name: 'Nome é obrigatório' }));
                 return;
             }
             if (!formData.phone.trim()) {
-                setFormErrors((prev) => ({ ...prev, phone: 'Telefone é obrigatório' }));
+                setFormErrors((prev: FormErrors) => ({ ...prev, phone: 'Telefone é obrigatório' }));
                 return;
             }
             if (!formData.email.trim()) {
-                setFormErrors((prev) => ({ ...prev, email: 'Email é obrigatório' }));
+                setFormErrors((prev: FormErrors) => ({ ...prev, email: 'Email é obrigatório' }));
                 return;
             }
             if (!formData.cpf.trim()) {
-                setFormErrors((prev) => ({ ...prev, cpf: 'CPF é obrigatório' }));
+                setFormErrors((prev: FormErrors) => ({ ...prev, cpf: 'CPF é obrigatório' }));
                 return;
             }
             if (!formData.gasStationId) {
-                setFormErrors((prev) => ({ ...prev, gasStationId: 'Posto é obrigatório' }));
+                setFormErrors((prev: FormErrors) => ({ ...prev, gasStationId: 'Posto é obrigatório' }));
                 return;
             }
             await createDeliveryman({
@@ -135,7 +143,7 @@ const DeliverymanScreen = ({ onNavigate, activeScreen = 'deliverymen' }: Deliver
         try {
             setFormErrors({});
             if (!formData.name.trim()) {
-                setFormErrors((prev) => ({ ...prev, name: 'Nome é obrigatório' }));
+                setFormErrors((prev: FormErrors) => ({ ...prev, name: 'Nome é obrigatório' }));
                 return;
             }
             if (!selectedDeliveryman || !selectedDeliveryman.id) return;
@@ -376,8 +384,8 @@ const DeliverymanScreen = ({ onNavigate, activeScreen = 'deliverymen' }: Deliver
                                         Informações Pessoais
                                     </h3>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <Input label="Nome Completo" type="text" value={formData.name} onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))} error={formErrors.name} placeholder="Digite o nome completo" required className="px-4 py-3 text-base" />
-                                        <Input label="CPF" type="text" value={formData.cpf} onChange={(e) => setFormData(prev => ({ ...prev, cpf: e.target.value }))} error={formErrors.cpf} placeholder="000.000.000-00" required className="px-4 py-3 text-base" />
+                                        <Input label="Nome Completo" type="text" value={formData.name} onChange={(e) => setFormData((prev: FormData) => ({ ...prev, name: e.target.value }))} error={formErrors.name} placeholder="Digite o nome completo" required className="px-4 py-3 text-base" />
+                                        <Input label="CPF" type="text" value={formData.cpf} onChange={(e) => setFormData((prev: FormData) => ({ ...prev, cpf: e.target.value }))} error={formErrors.cpf} placeholder="000.000.000-00" required className="px-4 py-3 text-base" />
                                     </div>
                                 </div>
                                 <div className="space-y-4">
@@ -386,8 +394,8 @@ const DeliverymanScreen = ({ onNavigate, activeScreen = 'deliverymen' }: Deliver
                                         Informações de Contato
                                     </h3>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <Input label="Telefone" type="tel" value={formData.phone} onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))} error={formErrors.phone} placeholder="(11) 99999-9999" required className="px-4 py-3 text-base" />
-                                        <Input label="Email" type="email" value={formData.email} onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))} error={formErrors.email} placeholder="email@exemplo.com" required className="px-4 py-3 text-base" />
+                                        <Input label="Telefone" type="tel" value={formData.phone} onChange={(e) => setFormData((prev: FormData) => ({ ...prev, phone: e.target.value }))} error={formErrors.phone} placeholder="(11) 99999-9999" required className="px-4 py-3 text-base" />
+                                        <Input label="Email" type="email" value={formData.email} onChange={(e) => setFormData((prev: FormData) => ({ ...prev, email: e.target.value }))} error={formErrors.email} placeholder="email@exemplo.com" required className="px-4 py-3 text-base" />
                                     </div>
                                 </div>
                                 <div className="space-y-4">
@@ -397,7 +405,7 @@ const DeliverymanScreen = ({ onNavigate, activeScreen = 'deliverymen' }: Deliver
                                     </h3>
                                     <div className="space-y-3">
                                         <label className="block text-sm font-medium text-gray-700 mb-3">Posto de Gasolina *</label>
-                                        <select value={formData.gasStationId} onChange={(e) => setFormData(prev => ({ ...prev, gasStationId: e.target.value }))} className={`w-full border rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${formErrors.gasStationId ? 'border-red-500 ring-red-200' : 'border-gray-300'}`}>
+                                        <select value={formData.gasStationId} onChange={(e) => setFormData((prev: FormData) => ({ ...prev, gasStationId: e.target.value }))} className={`w-full border rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${formErrors.gasStationId ? 'border-red-500 ring-red-200' : 'border-gray-300'}`}>
                                             <option value="">Selecione um posto</option>
                                             {gasStations.map((station) => (<option key={station.id} value={station.id}>{station.name}</option>))}
                                         </select>
@@ -425,9 +433,9 @@ const DeliverymanScreen = ({ onNavigate, activeScreen = 'deliverymen' }: Deliver
                                             <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                             Informações Pessoais
                                         </h3>
-                                        <Input label="Nome Completo" type="text" value={formData.name} onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))} error={formErrors.name} placeholder="Nome completo do entregador" className="px-4 py-3 text-base" />
+                                        <Input label="Nome Completo" type="text" value={formData.name} onChange={(e) => setFormData((prev: FormData) => ({ ...prev, name: e.target.value }))} error={formErrors.name} placeholder="Nome completo do entregador" className="px-4 py-3 text-base" />
                                         <div className="relative">
-                                            <Input label="CPF" type="text" value={formData.cpf} onChange={(e) => setFormData(prev => ({ ...prev, cpf: e.target.value }))} error={formErrors.cpf} placeholder="000.000.000-00" disabled className="px-4 py-3 text-base bg-gray-50" />
+                                            <Input label="CPF" type="text" value={formData.cpf} onChange={(e) => setFormData((prev: FormData) => ({ ...prev, cpf: e.target.value }))} error={formErrors.cpf} placeholder="000.000.000-00" disabled className="px-4 py-3 text-base bg-gray-50" />
                                             <p className="text-xs text-gray-500 mt-2 flex items-center"><svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" /></svg>CPF não pode ser alterado após o cadastro</p>
                                         </div>
                                     </div>
@@ -436,8 +444,8 @@ const DeliverymanScreen = ({ onNavigate, activeScreen = 'deliverymen' }: Deliver
                                             <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                                             Informações de Contato
                                         </h3>
-                                        <Input label="Telefone" type="tel" value={formData.phone} onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))} error={formErrors.phone} placeholder="(11) 99999-9999" className="px-4 py-3 text-base" />
-                                        <Input label="Email" type="email" value={formData.email} onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))} error={formErrors.email} placeholder="email@exemplo.com" className="px-4 py-3 text-base" />
+                                        <Input label="Telefone" type="tel" value={formData.phone} onChange={(e) => setFormData((prev: FormData) => ({ ...prev, phone: e.target.value }))} error={formErrors.phone} placeholder="(11) 99999-9999" className="px-4 py-3 text-base" />
+                                        <Input label="Email" type="email" value={formData.email} onChange={(e) => setFormData((prev: FormData) => ({ ...prev, email: e.target.value }))} error={formErrors.email} placeholder="email@exemplo.com" className="px-4 py-3 text-base" />
                                     </div>
                                 </div>
                                 <div className="flex gap-4 pt-8 border-t border-gray-100 px-1">
@@ -460,9 +468,9 @@ const DeliverymanScreen = ({ onNavigate, activeScreen = 'deliverymen' }: Deliver
                                         <label key={permission.key} className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-colors cursor-pointer group">
                                             <input type="checkbox" checked={selectedPermissions.includes(permission.key)} onChange={(e) => {
                                                 if (e.target.checked) {
-                                                    setSelectedPermissions(prev => [...prev, permission.key]);
+                                                    setSelectedPermissions((prev: string[]) => [...prev, permission.key]);
                                                 } else {
-                                                    setSelectedPermissions(prev => prev.filter(p => p !== permission.key));
+                                                    setSelectedPermissions((prev: string[]) => prev.filter((p: string) => p !== permission.key));
                                                 }
                                             }} className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" />
                                             <div className="flex items-center ml-4">
