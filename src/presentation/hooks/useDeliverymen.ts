@@ -60,7 +60,7 @@ const useDeliverymen = (gasStationId: string | null = null) => {
             setError(null);
 
             const newDeliveryman = await deliverymanService.createDeliveryman(deliverymanData);
-            setDeliverymen(prev => [newDeliveryman, ...prev]);
+            setDeliverymen((prev: Deliveryman[]) => [newDeliveryman, ...prev]);
 
             return newDeliveryman;
         } catch (err) {
@@ -78,7 +78,7 @@ const useDeliverymen = (gasStationId: string | null = null) => {
             setError(null);
 
             const updatedDeliveryman = await deliverymanService.updateDeliveryman(id, deliverymanData);
-            setDeliverymen(prev =>
+            setDeliverymen((prev: Deliveryman[]) =>
                 prev.map(deliveryman =>
                     deliveryman.id === id ? updatedDeliveryman : deliveryman
                 )
@@ -100,7 +100,7 @@ const useDeliverymen = (gasStationId: string | null = null) => {
             setError(null);
 
             await deliverymanService.deleteDeliveryman(id);
-            setDeliverymen(prev => prev.filter(deliveryman => deliveryman.id !== id));
+            setDeliverymen((prev: Deliveryman[]) => prev.filter(deliveryman => deliveryman.id !== id));
 
             return true;
         } catch (err) {
@@ -118,7 +118,7 @@ const useDeliverymen = (gasStationId: string | null = null) => {
             setError(null);
 
             const updatedDeliveryman = await deliverymanService.activateDeliveryman(id);
-            setDeliverymen(prev =>
+            setDeliverymen((prev: Deliveryman[]) =>
                 prev.map(deliveryman =>
                     deliveryman.id === id ? updatedDeliveryman : deliveryman
                 )
@@ -140,7 +140,7 @@ const useDeliverymen = (gasStationId: string | null = null) => {
             setError(null);
 
             const updatedDeliveryman = await deliverymanService.deactivateDeliveryman(id);
-            setDeliverymen(prev =>
+            setDeliverymen((prev: Deliveryman[]) =>
                 prev.map(deliveryman =>
                     deliveryman.id === id ? updatedDeliveryman : deliveryman
                 )
@@ -162,7 +162,7 @@ const useDeliverymen = (gasStationId: string | null = null) => {
             setError(null);
 
             const updatedDeliveryman = await deliverymanService.updatePermissions(id, permissions);
-            setDeliverymen(prev =>
+            setDeliverymen((prev: Deliveryman[]) =>
                 prev.map(deliveryman =>
                     deliveryman.id === id ? updatedDeliveryman : deliveryman
                 )

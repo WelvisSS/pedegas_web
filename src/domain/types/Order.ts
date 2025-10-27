@@ -1,5 +1,6 @@
 export interface OrderItem {
   type?: string;
+  product?: string;
   product_name?: string;
   quantity: number;
   price: number;

@@ -53,7 +53,7 @@ const useInventory = (gasStationId: string | null = null) => {
             setError(null);
 
             const newItem: Inventory = await inventoryService.createInventoryItem(gasStationId!, inventoryData);
-            setInventory(prev => [...prev, newItem]);
+            setInventory((prev: Inventory[]) => [...prev, newItem]);
 
             // Refresh stats
             const statsData: InventoryStats = await inventoryService.getInventoryStats(gasStationId!);
@@ -75,7 +75,7 @@ const useInventory = (gasStationId: string | null = null) => {
             setError(null);
 
             const updatedItem: Inventory = await inventoryService.updateInventoryItem(inventoryId, updates);
-            setInventory(prev =>
+            setInventory((prev: Inventory[]) =>
                 prev.map((item: Inventory) =>
                     item.id === inventoryId ? updatedItem : item
                 )
@@ -101,7 +101,7 @@ const useInventory = (gasStationId: string | null = null) => {
             setError(null);
 
             await inventoryService.deleteInventoryItem(inventoryId);
-            setInventory(prev => prev.filter(item => item.id !== inventoryId));
+            setInventory((prev: Inventory[]) => prev.filter(item => item.id !== inventoryId));
 
             // Refresh stats
             const statsData = await inventoryService.getInventoryStats(gasStationId!);
@@ -123,7 +123,7 @@ const useInventory = (gasStationId: string | null = null) => {
             setError(null);
 
             const updatedItem = await inventoryService.addStock(inventoryId, quantity);
-            setInventory(prev =>
+            setInventory((prev: Inventory[]) =>
                 prev.map(item =>
                     item.id === inventoryId ? updatedItem : item
                 )
@@ -149,7 +149,7 @@ const useInventory = (gasStationId: string | null = null) => {
             setError(null);
 
             const updatedItem = await inventoryService.removeStock(inventoryId, quantity);
-            setInventory(prev =>
+            setInventory((prev: Inventory[]) =>
                 prev.map(item =>
                     item.id === inventoryId ? updatedItem : item
                 )

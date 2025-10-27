@@ -3,7 +3,7 @@ import { InventoryService } from '../../../application/services/InventoryService
 import { supabase } from '../../../lib/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
 import { useOrders } from '../../hooks/useOrders.ts';
-import type { Order, DeliveryAddress } from '../../../domain/types/Order';
+import type { Order, OrderItem, DeliveryAddress } from '../../../domain/types/Order';
 import Alert from '../ui/Alert';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
@@ -189,7 +189,7 @@ const DeliveryScreen = ({ onNavigate, activeScreen = 'deliveries' }: { onNavigat
         try {
             // If confirming order, check and decrement stock
             if (newStatus === 'confirmed') {
-                const delivery = deliveries.find(d => d.id === orderId);
+                const delivery = deliveries.find((d: Order) => d.id === orderId);
                 if (!delivery) {
                     throw new Error('Pedido não encontrado');
                 }
@@ -201,8 +201,8 @@ const DeliveryScreen = ({ onNavigate, activeScreen = 'deliveries' }: { onNavigat
                 // Check stock availability
                 const availability = await inventoryService.checkStockAvailability(
                     String(delivery.gas_station_id),
-                    (delivery.items || []).map(item => ({
-                        product: item.product_name || '',
+                    (delivery.items || []).map((item: OrderItem) => ({
+                        product: item.product_name || item.product || item.type || '',
                         quantity: item.quantity
                     }))
                 );
@@ -219,8 +219,8 @@ const DeliveryScreen = ({ onNavigate, activeScreen = 'deliveries' }: { onNavigat
                 // Decrement stock
                 await inventoryService.decrementStockForOrder(
                     String(delivery.gas_station_id),
-                    (delivery.items || []).map(item => ({
-                        product: item.product_name || '',
+                    (delivery.items || []).map((item: OrderItem) => ({
+                        product: item.product_name || item.product || item.type || '',
                         quantity: item.quantity
                     }))
                 );
@@ -373,7 +373,7 @@ const DeliveryScreen = ({ onNavigate, activeScreen = 'deliveries' }: { onNavigat
 
         // Parse items
         const parsedItems = (order.items || []).map(item => ({
-            product: item.product_name || 'Produto',
+            product: item.product_name || item.product || item.type || 'Produto',
             quantity: item.quantity || 0,
             price: item.price || 0
         }));
@@ -412,7 +412,7 @@ const DeliveryScreen = ({ onNavigate, activeScreen = 'deliveries' }: { onNavigat
         };
     };
 
-    const filteredDeliveries = deliveries.filter(delivery => {
+    const filteredDeliveries = deliveries.filter((delivery: Order) => {
         // Filter by status
         let statusMatch = true;
         if (filter !== 'all') {
@@ -582,42 +582,42 @@ const DeliveryScreen = ({ onNavigate, activeScreen = 'deliveries' }: { onNavigat
                                     size="sm"
                                     onClick={() => setFilter('pending')}
                                 >
-                                    Pendentes ({deliveries.filter(d => d.status === 'pending').length})
+                                    Pendentes ({deliveries.filter((d: Order) => d.status === 'pending').length})
                                 </Button>
                                 <Button
                                     variant={filter === 'confirmed' ? 'primary' : 'outline'}
                                     size="sm"
                                     onClick={() => setFilter('confirmed')}
                                 >
-                                    Confirmados ({deliveries.filter(d => d.status === 'confirmed').length})
+                                    Confirmados ({deliveries.filter((d: Order) => d.status === 'confirmed').length})
                                 </Button>
                                 <Button
                                     variant={filter === 'preparing' ? 'primary' : 'outline'}
                                     size="sm"
                                     onClick={() => setFilter('preparing')}
                                 >
-                                    Preparando ({deliveries.filter(d => d.status === 'preparing').length})
+                                    Preparando ({deliveries.filter((d: Order) => d.status === 'preparing').length})
                                 </Button>
                                 <Button
                                     variant={filter === 'out_for_delivery' ? 'primary' : 'outline'}
                                     size="sm"
                                     onClick={() => setFilter('out_for_delivery')}
                                 >
-                                    Em Entrega ({deliveries.filter(d => d.status === 'out_for_delivery').length})
+                                    Em Entrega ({deliveries.filter((d: Order) => d.status === 'out_for_delivery').length})
                                 </Button>
                                 <Button
                                     variant={filter === 'delivered' ? 'primary' : 'outline'}
                                     size="sm"
                                     onClick={() => setFilter('delivered')}
                                 >
-                                    Entregues ({deliveries.filter(d => d.status === 'delivered').length})
+                                    Entregues ({deliveries.filter((d: Order) => d.status === 'delivered').length})
                                 </Button>
                                 <Button
                                     variant={filter === 'cancelled' ? 'primary' : 'outline'}
                                     size="sm"
                                     onClick={() => setFilter('cancelled')}
                                 >
-                                    Cancelados ({deliveries.filter(d => d.status === 'cancelled').length})
+                                    Cancelados ({deliveries.filter((d: Order) => d.status === 'cancelled').length})
                                 </Button>
                             </div>
                         </div>
@@ -641,7 +641,7 @@ const DeliveryScreen = ({ onNavigate, activeScreen = 'deliveries' }: { onNavigat
                                     </div>
                                 </Card>
                             ) : (
-                                filteredDeliveries.map((delivery, index) => {
+                                filteredDeliveries.map((delivery: Order, index: number) => {
                                     // Helper to format delivery address
                                     const formatDeliveryAddress = (addr: string | DeliveryAddress | undefined): string => {
                                         if (!addr) return 'N/A';
@@ -650,7 +650,8 @@ const DeliveryScreen = ({ onNavigate, activeScreen = 'deliveries' }: { onNavigat
                                     };
                                     
                                     return (
-                                    <Card key={delivery.id} className="relative">
+                                    <div key={delivery.id}>
+                                    <Card className="relative">
                                         {/* Timeline connector */}
                                         {index < filteredDeliveries.length - 1 && (
                                             <div className="absolute left-6 top-20 w-0.5 h-16 bg-secondary-200 z-0"></div>
@@ -836,6 +837,7 @@ const DeliveryScreen = ({ onNavigate, activeScreen = 'deliveries' }: { onNavigat
                                             </div>
                                         </div>
                                     </Card>
+                                    </div>
                                 )})
                             )}
                         </div>

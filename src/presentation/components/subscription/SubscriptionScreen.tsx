@@ -133,7 +133,7 @@ const SubscriptionScreen = ({ onNavigate, activeScreen = 'subscription' }: Subsc
     };
 
     const handleChangePlan = (newPlanId: string) => {
-        const plan = availablePlans.find(p => p.id === newPlanId);
+        const plan = availablePlans.find((p: Plan) => p.id === newPlanId);
         if (plan) {
             setSelectedNewPlan(plan);
             setShowChangePlanDialog(true);

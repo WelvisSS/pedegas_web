@@ -192,7 +192,7 @@ export const useOrders = () => {
     const handleRealtimeChange = useCallback(({ eventType, old, new: newRecord }: { eventType: 'INSERT' | 'UPDATE' | 'DELETE'; old: unknown; new: unknown }) => {
         console.log('🔄 Updating orders in real-time:', eventType);
 
-        setOrders(currentOrders => {
+        setOrders((currentOrders: Order[]) => {
             let updatedOrders = [...currentOrders];
             const newOrder = newRecord as Order;
             const oldOrder = old as Order;

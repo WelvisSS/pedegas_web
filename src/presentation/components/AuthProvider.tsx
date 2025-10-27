@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     getInitialSession();
 
     // Listen for auth changes
-    const unsubscribe = authService.onAuthStateChange((_event, session) => {
+    const unsubscribe = authService.onAuthStateChange((_event: string, session: AuthSession | null) => {
       setSession(session);
       setUser(session?.user || null);
       setLoading(false);

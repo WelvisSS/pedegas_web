@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import Alert from '../ui/Alert';
 import Button from '../ui/Button';
@@ -48,9 +48,9 @@ interface OrderData extends Record<string, unknown> {
     deliveryAddress: string;
     items: string;
     priority: 'low' | 'medium' | 'high' | 'urgent';
-    notes: string | null;
-    estimatedDelivery: string | null;
-    gasStationId: string | null;
+    notes?: string;
+    estimatedDelivery?: string;
+    gasStationId?: string;
     totalAmount: number;
 }
 
@@ -60,7 +60,7 @@ interface NewOrderFormProps {
     gasStations?: GasStation[];
 }
 
-const NewOrderForm: React.FC<NewOrderFormProps> = ({ onSubmit, onCancel, gasStations }) => {
+const NewOrderForm = ({ onSubmit, onCancel, gasStations }: NewOrderFormProps) => {
     const { user } = useAuth();
 
     const [formData, setFormData] = useState<FormData>({
@@ -132,7 +132,7 @@ const NewOrderForm: React.FC<NewOrderFormProps> = ({ onSubmit, onCancel, gasStat
     // Preencher dados do usuário automaticamente
     useEffect(() => {
         if (user) {
-            setFormData(prev => ({
+            setFormData((prev: FormData) => ({
                 ...prev,
                 customerName: user.name || '',
                 customerEmail: user.email || '',
@@ -144,7 +144,7 @@ const NewOrderForm: React.FC<NewOrderFormProps> = ({ onSubmit, onCancel, gasStat
     const handleInputChange = (field: string, value: string) => {
         if (field.includes('.')) {
             const [parent, child] = field.split('.');
-            setFormData(prev => {
+            setFormData((prev: FormData) => {
                 if (parent === 'deliveryAddress') {
                     return {
                         ...prev,
@@ -157,7 +157,7 @@ const NewOrderForm: React.FC<NewOrderFormProps> = ({ onSubmit, onCancel, gasStat
                 return prev;
             });
         } else {
-            setFormData(prev => ({
+            setFormData((prev: FormData) => ({
                 ...prev,
                 [field]: value
             }));
@@ -176,14 +176,14 @@ const NewOrderForm: React.FC<NewOrderFormProps> = ({ onSubmit, onCancel, gasStat
             newItems[index].price = productPrices[value as string] || 0;
         }
 
-        setFormData(prev => ({
+        setFormData((prev: FormData) => ({
             ...prev,
             items: newItems
         }));
     };
 
     const addItem = () => {
-        setFormData(prev => ({
+        setFormData((prev: FormData) => ({
             ...prev,
             items: [
                 ...prev.items,
@@ -200,7 +200,7 @@ const NewOrderForm: React.FC<NewOrderFormProps> = ({ onSubmit, onCancel, gasStat
 
     const removeItem = (index: number) => {
         if (formData.items.length > 1) {
-            setFormData(prev => ({
+            setFormData((prev: FormData) => ({
                 ...prev,
                 items: prev.items.filter((_, i) => i !== index)
             }));
@@ -208,7 +208,7 @@ const NewOrderForm: React.FC<NewOrderFormProps> = ({ onSubmit, onCancel, gasStat
     };
 
     const calculateTotal = () => {
-        return formData.items.reduce((total, item) => {
+        return formData.items.reduce((total: number, item: OrderItem) => {
             return total + (item.price * item.quantity);
         }, 0);
     };
@@ -232,7 +232,7 @@ const NewOrderForm: React.FC<NewOrderFormProps> = ({ onSubmit, onCancel, gasStat
         return errors;
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const errors = validateForm();
@@ -253,10 +253,10 @@ const NewOrderForm: React.FC<NewOrderFormProps> = ({ onSubmit, onCancel, gasStat
                 totalAmount: calculateTotal(),
                 deliveryAddress: JSON.stringify(formData.deliveryAddress),
                 items: JSON.stringify(formData.items),
-                // Converter campos vazios para null para evitar erros de timestamp
-                estimatedDelivery: formData.estimatedDelivery ? formData.estimatedDelivery : null,
-                notes: formData.notes ? formData.notes : null,
-                gasStationId: formData.gasStationId ? formData.gasStationId : null
+                // Converter campos vazios para undefined
+                estimatedDelivery: formData.estimatedDelivery || undefined,
+                notes: formData.notes || undefined,
+                gasStationId: formData.gasStationId || undefined
             };
 
             await onSubmit(orderData);

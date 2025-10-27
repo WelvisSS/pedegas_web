@@ -17,9 +17,9 @@ interface OrderData extends Record<string, unknown> {
     deliveryAddress: string;
     items: string;
     priority: 'low' | 'medium' | 'high' | 'urgent';
-    notes: string | null;
-    estimatedDelivery: string | null;
-    gasStationId: string | null;
+    notes?: string;
+    estimatedDelivery?: string;
+    gasStationId?: string;
     totalAmount: number;
 }
 
@@ -28,7 +28,7 @@ interface OrderScreenProps {
     activeScreen?: string;
 }
 
-const OrderScreen: React.FC<OrderScreenProps> = ({ onNavigate, activeScreen = 'orders' }) => {
+const OrderScreen = ({ onNavigate, activeScreen = 'orders' }: OrderScreenProps) => {
     const { user } = useAuth();
     const {
         orders,
