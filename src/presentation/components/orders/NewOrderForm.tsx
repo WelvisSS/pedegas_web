@@ -48,9 +48,9 @@ interface OrderData extends Record<string, unknown> {
     deliveryAddress: string;
     items: string;
     priority: 'low' | 'medium' | 'high' | 'urgent';
-    notes?: string;
-    estimatedDelivery?: string;
-    gasStationId?: string;
+    notes: string | null;
+    estimatedDelivery: string | null;
+    gasStationId: string | null;
     totalAmount: number;
 }
 
@@ -132,15 +132,11 @@ const NewOrderForm: React.FC<NewOrderFormProps> = ({ onSubmit, onCancel, gasStat
     // Preencher dados do usuário automaticamente
     useEffect(() => {
         if (user) {
-            const fullName = user.name || user.email?.split('@')[0] || '';
-            const email = user.email || '';
-
             setFormData(prev => ({
                 ...prev,
-                customerName: fullName,
-                customerEmail: email,
-                // Phone is not available in the User entity, leave it empty
-                customerPhone: ''
+                customerName: user.name || '',
+                customerEmail: user.email || '',
+                customerPhone: user.phone || ''
             }));
         }
     }, [user]);
@@ -257,9 +253,10 @@ const NewOrderForm: React.FC<NewOrderFormProps> = ({ onSubmit, onCancel, gasStat
                 totalAmount: calculateTotal(),
                 deliveryAddress: JSON.stringify(formData.deliveryAddress),
                 items: JSON.stringify(formData.items),
-                estimatedDelivery: formData.estimatedDelivery || undefined,
-                notes: formData.notes || undefined,
-                gasStationId: formData.gasStationId || undefined
+                // Converter campos vazios para null para evitar erros de timestamp
+                estimatedDelivery: formData.estimatedDelivery ? formData.estimatedDelivery : null,
+                notes: formData.notes ? formData.notes : null,
+                gasStationId: formData.gasStationId ? formData.gasStationId : null
             };
 
             await onSubmit(orderData);

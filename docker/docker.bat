@@ -50,7 +50,7 @@ REM ==================== FUNCOES ====================
 
 :start
 echo [33mi Iniciando o ambiente Docker...[0m
-docker ps | findstr "meu-node-env" >nul 2>nul
+docker ps | findstr /C:"meu-node-env" >nul 2>nul
 if %errorlevel% equ 0 (
     echo [33mi Container ja esta rodando![0m
     docker ps | findstr "meu-node-env"
@@ -94,7 +94,7 @@ exit /b 0
 
 :status
 echo [33mi Status do container:[0m
-docker ps | findstr "meu-node-env" >nul 2>nul
+docker ps | findstr /C:"meu-node-env" >nul 2>nul
 if %errorlevel% equ 0 (
     echo [32m✓ Container esta rodando[0m
     docker ps | findstr "meu-node-env"
@@ -110,7 +110,7 @@ if %errorlevel% equ 0 (
 exit /b 0
 
 :shell
-docker ps | findstr "meu-node-env" >nul 2>nul
+docker ps | findstr /C:"meu-node-env" >nul 2>nul
 if %errorlevel% equ 0 (
     echo [33mi Acessando shell do container...[0m
     docker exec -it meu-node-env /bin/sh
@@ -122,7 +122,7 @@ if %errorlevel% equ 0 (
 exit /b 0
 
 :start_and_shell
-docker ps | findstr "meu-node-env" >nul 2>nul
+docker ps | findstr /C:"meu-node-env" >nul 2>nul
 if %errorlevel% equ 0 (
     echo [33mi Container ja esta rodando![0m
 ) else (

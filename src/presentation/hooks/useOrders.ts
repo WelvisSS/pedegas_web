@@ -127,13 +127,10 @@ export const useOrders = () => {
                 userType: user?.userType
             });
 
-            console.log('Order data:', {
-                gasStationId: orderData.gasStationId,
-                customerName: orderData.customerName,
-                totalAmount: orderData.totalAmount
-            });
-
-            const newOrder = await orderService.createOrder(orderData as never);
+            const newOrder = await orderService.createOrder({
+                ...orderData,
+                userId: user?.id
+            } as never);
 
             // No need to reload - Realtime will add automatically
             // The useRealtimeOrders hook will detect the INSERT and add to the list

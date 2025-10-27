@@ -17,9 +17,9 @@ interface OrderData extends Record<string, unknown> {
     deliveryAddress: string;
     items: string;
     priority: 'low' | 'medium' | 'high' | 'urgent';
-    notes?: string;
-    estimatedDelivery?: string;
-    gasStationId?: string;
+    notes: string | null;
+    estimatedDelivery: string | null;
+    gasStationId: string | null;
     totalAmount: number;
 }
 
